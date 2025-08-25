@@ -7,7 +7,7 @@ const registerSites = async (req, res) => {
         RETURNING *;
     `;
 
-    const checkLocation = `
+    const checkSite = `
         SELECT * FROM sites 
         WHERE site_code = $1 AND site_name = $2 AND region_id = $3;
     `;
@@ -23,7 +23,7 @@ const registerSites = async (req, res) => {
 
         region_id = parseInt(region_id);
 
-        const dbResSite = await pool.query(checkLocation, [site_code, site_name, region_id]);
+        const dbResSite = await pool.query(checkSite, [site_code, site_name, region_id]);
         if (dbResSite.rows.length > 0) {
             return res.status(400).json({
                 message: "Site already exists"
