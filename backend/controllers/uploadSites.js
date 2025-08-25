@@ -17,12 +17,12 @@ const uploadSites = async (req, res) => {
             const batch = sites.slice(i, i + batchSize);
 
             const values = [];
-            const placeholders = batch.map((site, index) => {
+            const placeholders = batch.map((site, idx) => {
                 const base = idx * 3;
                 values.push(
-                    sites.site_code,
-                    sites.site_name,
-                    sites.region_id
+                    site.site_code,
+                    site.site_name,
+                    site.region_id
                 );
                 return `($${base + 1}, $${base + 2}, $${base + 3})`;
             });
@@ -38,7 +38,8 @@ const uploadSites = async (req, res) => {
         await pool.query("COMMIT");
 
         res.status(201).json({
-            message: "Sites uploaded successfully"
+            message: "Sites uploaded successfully", 
+            inserted: sites.length
         });
 
     } catch (error) {
